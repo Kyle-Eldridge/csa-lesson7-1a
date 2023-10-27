@@ -32,6 +32,7 @@ public class GuessingGame {
 
     /** The Timeline to manage how often a prediction is made */
     private Timeline timeline;
+    private Timeline timeline2;
 
     /**
      * Constructor for the GuessingGame class.
@@ -113,7 +114,7 @@ public class GuessingGame {
      * the computer's guess is displayed in the app.
      */
     private void updateGame() {
-        timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(10), event -> {
             // Get the predicted class and score from the CameraController
             String predictedClass = cameraController.getPredictedClass();
             double predictedScore = cameraController.getPredictedScore();
@@ -122,14 +123,14 @@ public class GuessingGame {
                 // Show the user's response and confidence score in the app
                 game.showUserResponse(predictedClass, predictedScore);
 
-                // Get the result of the computer's guess
-                int result = logic.binarySearch(predictedClass);
-
+                
                 // End the game if the guess is correct
                 if (logic.isGuessCorrect(predictedClass)) {
-                    loadGameOver(result);
+                    loadGameOver(logic.binarySearch(predictedClass));
                 }
                 else {
+                    // Get the result of the computer's guess
+                    int result = logic.binarySearch(predictedClass);
                     // Create a String with the computer's guess
                     String computerGuess = "Computer Guess: " + result;
 
@@ -138,12 +139,24 @@ public class GuessingGame {
                 }
             }
         }));
+        timeline2 = new Timeline(new KeyFrame(Duration.seconds(0.2), event -> {
+            // Get the predicted class and score from the CameraController
+            String predictedClass = cameraController.getPredictedClass();
+            double predictedScore = cameraController.getPredictedScore();
+
+            if (predictedClass != null) {
+                // Show the user's response and confidence score in the app
+                game.showUserResponse(predictedClass, predictedScore);
+            }
+        }));
         
         // Specify that the animation should repeat indefinitely
         timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline2.setCycleCount(Timeline.INDEFINITE);
 
         // Start the animation
         timeline.play();
+        timeline2.play();
     }
 
     /**
@@ -162,13 +175,14 @@ public class GuessingGame {
         });
 
         // Create the GameOverScene layout
-        Scene gameOverScene = gameOver.createGameOverScene(number, cameraController);
+        Scene gameOverScene = gameOver.createGameOverScene(number, logic.getGuessCount(), cameraController);
 
         // Set the GameOverScene in the window
         window.setScene(gameOverScene);
 
         // Stop the timeline
         timeline.stop();
+        timeline2.stop();
     }
 
     /**
@@ -189,6 +203,9 @@ public class GuessingGame {
         // Play the timeline if it is not null
         if (timeline != null) {
             timeline.play();
+        }
+        if (timeline2 != null) {
+            timeline2.play();
         }
     }
 

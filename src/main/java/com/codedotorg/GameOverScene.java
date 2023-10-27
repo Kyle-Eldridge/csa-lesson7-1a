@@ -33,7 +33,7 @@ public class GameOverScene {
      * @param cameraController The CameraController object used to control the camera in the 3D scene.
      * @return A Scene object that displays a message indicating that the computer has guessed the correct number.
      */
-    public Scene createGameOverScene(int correctNumber, CameraController cameraController) {
+    public Scene createGameOverScene(int correctNumber, int numGuesses, CameraController cameraController) {
         // Set the action for when the exit button is clicked
         createExitButtonAction(cameraController);
 
@@ -43,7 +43,7 @@ public class GameOverScene {
 
         // Create the labels to display the correct number and success message
         Label correctNumberLabel = new Label("Correct Number: " + correctNumber);
-        Label successMessage = new Label("The computer guessed the number!");
+        Label successMessage = new Label("The computer guessed the number in "+numGuesses+" guesses!");
 
         // Add the labels and buttons to the layout
         layout.getChildren().addAll(correctNumberLabel, successMessage, playAgainButton, exitButton);

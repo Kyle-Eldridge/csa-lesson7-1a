@@ -11,6 +11,8 @@ public class GameLogic {
     /** The computer's guess, which is the middle number between the lowest and highest number */
     private int guess;
 
+    int guessCount = 0;
+
     /**
      * Initializes the game logic with a range of 0 to 100 and
      * sets the initial guess to the midpoint of the range.
@@ -18,7 +20,8 @@ public class GameLogic {
     public GameLogic() {
         left = 0;
         right = 100;
-        guess = (left + right) / 2;
+        guess = -1;
+        guessCount = 0;
     }
 
     /**
@@ -28,8 +31,24 @@ public class GameLogic {
      * @return an integer representing the next guess to make (-1 if the user's response is invalid)
      */
     public int binarySearch(String predictedClass) {
-        
-        return 0;
+        System.out.println(predictedClass);
+        if(guess == -1){
+            guessCount++;
+            guess = (left + right) / 2;
+            return guess;
+        }
+        switch(predictedClass){
+            case "1 thumbsup":
+                guessCount++;
+                return guessHigher();
+            case "3 thumbsdown":
+                guessCount++;
+                return guessLower();
+            case "2 stop":
+                return guessCorrect();
+            default:
+                return guess;
+        }
     }
 
     /**
@@ -39,8 +58,7 @@ public class GameLogic {
      * @return true if the user's guess is "stop", false otherwise
      */
     public boolean isGuessCorrect(String predictedClass) {
-        
-        return false;
+        return predictedClass.equals("2 stop") && guess != -1;
     }
 
     /**
@@ -51,8 +69,9 @@ public class GameLogic {
      * @return the next guess
      */
     public int guessHigher() {
-        
-        return 0;
+        left = guess;
+        guess = (left+right)/2;
+        return guess;
     }
 
     /**
@@ -62,8 +81,9 @@ public class GameLogic {
      * @return the new guess
      */
     public int guessLower() {
-        
-        return 0;
+        right = guess;
+        guess = (left+right)/2;
+        return guess;
     }
 
     /**
@@ -72,8 +92,9 @@ public class GameLogic {
      * @return the correct guess
      */
     public int guessCorrect() {
-
-        return 0;
+        left = guess;
+        right = guess;
+        return guess;
     }
 
     /**
@@ -83,7 +104,11 @@ public class GameLogic {
     public void resetLogic() {
         left = 0;
         right = 100;
-        guess = (left + right) / 2;
+        guess = -1;
+        guessCount = 0;
     }
 
+    public int getGuessCount() {
+        return guessCount;
+    }
 }
