@@ -34,6 +34,9 @@ public class GuessingGame {
     private Timeline timeline;
     private Timeline timeline2;
 
+    private boolean started;
+    private boolean paused = false;
+
     /**
      * Constructor for the GuessingGame class.
      * Sets up the window using the primaryStage, initializes the model
@@ -53,6 +56,8 @@ public class GuessingGame {
         game = new MainScene();
         gameOver = new GameOverScene();
         logic = new GameLogic();
+
+        started = false;
     }
 
     /**
@@ -118,8 +123,9 @@ public class GuessingGame {
             // Get the predicted class and score from the CameraController
             String predictedClass = cameraController.getPredictedClass();
             double predictedScore = cameraController.getPredictedScore();
-
+            
             if (predictedClass != null) {
+                started = true;
                 // Show the user's response and confidence score in the app
                 game.showUserResponse(predictedClass, predictedScore);
 
@@ -139,14 +145,16 @@ public class GuessingGame {
                 }
             }
         }));
-        timeline2 = new Timeline(new KeyFrame(Duration.seconds(0.2), event -> {
-            // Get the predicted class and score from the CameraController
-            String predictedClass = cameraController.getPredictedClass();
-            double predictedScore = cameraController.getPredictedScore();
+        timeline2 = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> {
+            if(started){
+                // Get the predicted class and score from the CameraController
+                String predictedClass = cameraController.getPredictedClass();
+                double predictedScore = cameraController.getPredictedScore();
 
-            if (predictedClass != null) {
-                // Show the user's response and confidence score in the app
-                game.showUserResponse(predictedClass, predictedScore);
+                if (predictedClass != null) {
+                    // Show the user's response and confidence score in the app
+                    game.showUserResponse(predictedClass, predictedScore);
+                }
             }
         }));
         
@@ -160,10 +168,10 @@ public class GuessingGame {
     }
 
     /**
-     * Loads the Game Over scene with the winner's name and sets the
+     * Loads the Game Over scene with the player's number and sets the
      * playAgainButton to reset the game when clicked. Stops the timeline.
      *
-     * @param winner the name of the winner of the game
+     * @param number The number that the computer guessed.
      */
     public void loadGameOver(int number) {
         // Retrieve the playAgainButton from the GameOverScene
@@ -191,11 +199,17 @@ public class GuessingGame {
      * running, it is resumed.
      */
     public void resetGame() {
+        started = false;
+        paused = false;
+
         // Reset the GameLogic
         logic.resetLogic();
 
         // Create the MainScene for the game
         Scene mainScene = game.createMainScene(cameraController);
+        game.getPauseButton().setOnAction(event -> {
+            pause();
+        });
 
         // Set the MainScene in the window
         window.setScene(mainScene);
@@ -209,4 +223,14 @@ public class GuessingGame {
         }
     }
 
+    public void pause(){
+        paused = !paused;
+        if(paused){
+            game.getPauseButton().setText("Resume");
+            timeline.pause();
+        }else{
+            game.getPauseButton().setText("Pause");
+            timeline.play();
+        }
+    }
 }

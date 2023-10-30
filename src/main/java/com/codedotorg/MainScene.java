@@ -40,6 +40,8 @@ public class MainScene {
     /** Whether or not this is the first time the camera has loaded */
     private boolean firstCapture;
 
+    private Button pauseButton;
+
     /**
      * Constructs a new MainScene object.
      * Initializes the cameraView, progress, exitButton, titleLabel, computerGuessLabel,
@@ -99,10 +101,13 @@ public class MainScene {
 
         // Create spacer for above the exit button
         Region buttonSpacer = createSpacer(10);
+        Region buttonSpacer2 = createSpacer(10);
+
+        pauseButton = new Button("Pause");
 
         // Add the title label, prompt label, loading animation, camera view, prediction label, and exit button to the layout
         rootLayout.getChildren().addAll(titleLabel, promptLabel, cameraLoading.getCameraLoadingLabel(),
-            cameraSpacer1, cameraView, cameraSpacer2, cameraLoading.getProgressIndicator(), computerGuessLabel, predictionLabel, buttonSpacer, exitButton);
+            cameraSpacer1, cameraView, cameraSpacer2, cameraLoading.getProgressIndicator(), computerGuessLabel, predictionLabel, buttonSpacer, exitButton, buttonSpacer2);
 
         // Creates a new scene and set the layout as its root
         Scene mainScene = new Scene(rootLayout, 600, 750);
@@ -146,6 +151,9 @@ public class MainScene {
      * @param predictedScore The predicted score of the user response.
      */
     public void showUserResponse(String predictedClass, double predictedScore) {
+        rootLayout.getChildren().remove(pauseButton);
+        rootLayout.getChildren().add(pauseButton);
+
         // Hide the loading animation
         cameraLoading.hideLoadingAnimation(rootLayout, cameraView);
 
@@ -186,4 +194,7 @@ public class MainScene {
         return temp;
     }
     
+    public Button getPauseButton(){
+        return pauseButton;
+    }
 }
