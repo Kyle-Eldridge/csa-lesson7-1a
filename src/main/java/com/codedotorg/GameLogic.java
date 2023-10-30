@@ -31,7 +31,6 @@ public class GameLogic {
      * @return an integer representing the next guess to make (-1 if the user's response is invalid)
      */
     public int binarySearch(String predictedClass) {
-        System.out.println(predictedClass);
         if(guess == -1){
             guessCount++;
             guess = (left + right) / 2;

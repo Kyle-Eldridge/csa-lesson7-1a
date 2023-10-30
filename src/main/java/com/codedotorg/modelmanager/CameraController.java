@@ -46,7 +46,7 @@ public class CameraController {
     public void captureCamera(ImageView imageView, ModelManager model) {
         // Create a new thread to run the camera capture to prevent the camera from
         // from blocking the main thread and causing the app to become unresponsive
-        new Thread(() -> {
+        Thread cameraThread = new Thread(() -> {
             // Create a VideoCapture with the system default camera (0)
             VideoCapture camera = new VideoCapture(0);
 
@@ -84,7 +84,18 @@ public class CameraController {
 
             // Release the camera after usage
             camera.release();
-        }).start();
+            frame.release();
+        });
+        cameraThread.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            running = false;
+            try {
+                cameraThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 
     /**

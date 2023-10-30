@@ -207,7 +207,7 @@ public class GuessingGame {
 
         // Create the MainScene for the game
         Scene mainScene = game.createMainScene(cameraController);
-        game.getPauseButton().setOnAction(event -> {
+        game.getPauseButton().setOnMouseClicked(event -> {
             pause();
         });
 
@@ -225,6 +225,7 @@ public class GuessingGame {
 
     public void pause(){
         paused = !paused;
+        System.out.println(paused);
         if(paused){
             game.getPauseButton().setText("Resume");
             timeline.pause();

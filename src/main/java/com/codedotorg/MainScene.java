@@ -52,6 +52,7 @@ public class MainScene {
         cameraView.setId("camera");
 
         exitButton = new Button("Exit");
+        pauseButton = new Button("Pause");
         
         titleLabel = new Label("Guessing Game");
         titleLabel.setId("titleLabel");
@@ -90,6 +91,7 @@ public class MainScene {
     public Scene createMainScene(CameraController cameraController) {
         // Sets the action for when the exit button is clicked
         createExitButtonAction(cameraController);
+        pauseButton.setText("Pause");
 
         // Initialize the root layout
         rootLayout = new VBox();
@@ -102,8 +104,6 @@ public class MainScene {
         // Create spacer for above the exit button
         Region buttonSpacer = createSpacer(10);
         Region buttonSpacer2 = createSpacer(10);
-
-        pauseButton = new Button("Pause");
 
         // Add the title label, prompt label, loading animation, camera view, prediction label, and exit button to the layout
         rootLayout.getChildren().addAll(titleLabel, promptLabel, cameraLoading.getCameraLoadingLabel(),
@@ -151,8 +151,9 @@ public class MainScene {
      * @param predictedScore The predicted score of the user response.
      */
     public void showUserResponse(String predictedClass, double predictedScore) {
-        rootLayout.getChildren().remove(pauseButton);
-        rootLayout.getChildren().add(pauseButton);
+        if(!rootLayout.getChildren().contains(pauseButton)){
+            rootLayout.getChildren().add(pauseButton);
+        }
 
         // Hide the loading animation
         cameraLoading.hideLoadingAnimation(rootLayout, cameraView);
