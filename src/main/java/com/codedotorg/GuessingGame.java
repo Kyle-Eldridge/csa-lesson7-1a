@@ -1,5 +1,7 @@
 package com.codedotorg;
 
+import java.util.ArrayList;
+
 import com.codedotorg.modelmanager.CameraController;
 import com.codedotorg.modelmanager.ModelManager;
 
@@ -36,6 +38,8 @@ public class GuessingGame {
 
     private boolean started;
     private boolean paused = false;
+
+    ArrayList<Integer> guesses = new ArrayList<>();
 
     /**
      * Constructor for the GuessingGame class.
@@ -182,8 +186,9 @@ public class GuessingGame {
             resetGame();
         });
 
+        guesses.add(logic.getGuessCount());
         // Create the GameOverScene layout
-        Scene gameOverScene = gameOver.createGameOverScene(number, logic.getGuessCount(), cameraController);
+        Scene gameOverScene = gameOver.createGameOverScene(number, guesses, cameraController);
 
         // Set the GameOverScene in the window
         window.setScene(gameOverScene);

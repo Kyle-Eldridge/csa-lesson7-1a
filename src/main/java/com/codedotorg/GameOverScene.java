@@ -1,5 +1,7 @@
 package com.codedotorg;
 
+import java.util.ArrayList;
+
 import com.codedotorg.modelmanager.CameraController;
 
 import javafx.geometry.Pos;
@@ -33,7 +35,8 @@ public class GameOverScene {
      * @param cameraController The CameraController object used to control the camera in the 3D scene.
      * @return A Scene object that displays a message indicating that the computer has guessed the correct number.
      */
-    public Scene createGameOverScene(int correctNumber, int numGuesses, CameraController cameraController) {
+    public Scene createGameOverScene(int correctNumber, ArrayList<Integer> guesses, CameraController cameraController) {
+        int numGuesses = guesses.get(guesses.size() - 1);
         // Set the action for when the exit button is clicked
         createExitButtonAction(cameraController);
 
@@ -43,7 +46,12 @@ public class GameOverScene {
 
         // Create the labels to display the correct number and success message
         Label correctNumberLabel = new Label("Correct Number: " + correctNumber);
-        Label successMessage = new Label("The computer guessed the number in "+numGuesses+" guesses!");
+        double average = 0;
+        for(int i = 0; i < guesses.size(); i++){
+            average += guesses.get(i);
+        }
+        average /= guesses.size();
+        Label successMessage = new Label("The computer guessed the number in "+numGuesses+" guess"+(numGuesses==1?"":"es")+"!\n\tAverage number of guesses: "+average+"\n\t"+guesses.size()+" game"+(guesses.size()==1?"":"s")+" played");
 
         // Add the labels and buttons to the layout
         layout.getChildren().addAll(correctNumberLabel, successMessage, playAgainButton, exitButton);
