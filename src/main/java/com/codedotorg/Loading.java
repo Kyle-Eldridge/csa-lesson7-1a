@@ -1,6 +1,8 @@
 package com.codedotorg;
 
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -12,6 +14,8 @@ public class Loading {
 
     /** The progress indicator for while the camera is loading */
     private ProgressIndicator progress;
+    private ProgressBar bar;
+    private int animation = 0;
 
     /**
      * Constructor for the Loading class.
@@ -22,6 +26,7 @@ public class Loading {
         progress = new ProgressIndicator();
         progress.setId("loading");
         cameraLoadingLabel = new Label("Camera loading...");
+        bar = new ProgressBar();
     }
 
     /**
@@ -32,13 +37,21 @@ public class Loading {
         return cameraLoadingLabel;
     }
 
+    public void randomize(){
+        animation = (int)(Math.random()*2);
+    }
+
     /**
      * Returns the ProgressIndicator object used to display the loading progress.
      *
      * @return the ProgressIndicator object used to display the loading progress
      */
-    public ProgressIndicator getProgressIndicator() {
-        return progress;
+    public Control getProgressIndicator() {
+        if(animation == 0){
+            return progress;
+        }else{
+            return bar;
+        }
     }
 
     /**
@@ -48,6 +61,7 @@ public class Loading {
         cameraView.setVisible(false);
         cameraLoadingLabel.setVisible(true);
         progress.setVisible(true);
+        bar.setVisible(true);
     }
 
     /**
@@ -56,6 +70,7 @@ public class Loading {
      */
     public void hideLoadingAnimation(VBox rootLayout, ImageView cameraView) {
         rootLayout.getChildren().remove(progress);
+        rootLayout.getChildren().remove(bar);
         rootLayout.getChildren().remove(cameraLoadingLabel);
         cameraView.setVisible(true);
     }

@@ -105,6 +105,7 @@ public class MainScene {
         Region buttonSpacer = createSpacer(10);
         Region buttonSpacer2 = createSpacer(10);
 
+        cameraLoading.randomize();
         // Add the title label, prompt label, loading animation, camera view, prediction label, and exit button to the layout
         rootLayout.getChildren().addAll(titleLabel, promptLabel, cameraLoading.getCameraLoadingLabel(),
             cameraSpacer1, cameraView, cameraSpacer2, cameraLoading.getProgressIndicator(), computerGuessLabel, predictionLabel, buttonSpacer, exitButton, buttonSpacer2);
